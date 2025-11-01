@@ -708,14 +708,12 @@ def render_H1_local_language(df, theme):
                 font=dict(size=18, color=theme["primary"], family='Orbitron')
             ),
             xaxis=dict(
-                title="Platform",
-                titlefont=dict(color=theme["secondary"]),
+                title=dict(text="Platform", font=dict(color=theme["secondary"])),
                 tickfont=dict(color=theme["text"]),
                 gridcolor=grid_color # FIXED: Using variable
             ),
             yaxis=dict(
-                title="Local Content Ratio (%)",
-                titlefont=dict(color=theme["secondary"]),
+                title=dict(text="Local Content Ratio (%)", font=dict(color=theme["secondary"])),
                 tickfont=dict(color=theme["text"]),
                 gridcolor=grid_color # FIXED: Using variable
             ),
