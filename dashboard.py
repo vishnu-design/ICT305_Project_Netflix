@@ -10,24 +10,19 @@ import seaborn as sns
 # --- UTILITY: HEX TO RGBA CONVERTER ---
 def hex_to_rgba(hex_color, opacity=0.1):
     """Converts a 6-character hex color to an rgba string with specified opacity."""
-    # Remove #, convert to RGB tuple
     h = hex_color.lstrip('#')
     if len(h) == 6:
         r, g, b = tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
     else:
-        # Fallback for invalid hex
         r, g, b = (0, 0, 0)
-    # Return valid rgba string
     return f'rgba({r}, {g}, {b}, {opacity})'
 
-# --- UTILITY: RGBA STRING TO MATPLOTLIB TUPLE (THE CRITICAL FIX) ---
+# --- UTILITY: RGBA STRING TO MATPLOTLIB TUPLE ---
 def rgba_string_to_mpl_tuple(rgba_string):
     """Converts a standard CSS rgba() string to a Matplotlib normalized (0-1) RGBA tuple."""
     if not isinstance(rgba_string, str) or not rgba_string.startswith('rgba('):
-        # Fallback for non-rgba strings (like hex codes in light themes)
         return rgba_string 
     
-    # Use regex to extract the four numerical components (r, g, b, a)
     match = re.search(r'rgba\((\d+),\s*(\d+),\s*(\d+),\s*([0-9.]+)\)', rgba_string)
     if match:
         r = int(match.group(1)) / 255.0
@@ -35,17 +30,16 @@ def rgba_string_to_mpl_tuple(rgba_string):
         b = int(match.group(3)) / 255.0
         a = float(match.group(4))
         return (r, g, b, a)
-    return (0.0, 0.0, 0.0, 0.0) # Fallback
+    return (0.0, 0.0, 0.0, 0.0)
 
-# --- POPULAR OTT SHOWS FOR HOMEPAGE ---
-# Using theme-less placeholders for a clean look on the homepage
+# --- POPULAR OTT SHOWS FOR HOMEPAGE (WITH REAL IMAGES) ---
 FEATURED_SHOWS = [
-    {"title": "Stranger Things", "url": "https://placehold.co/400x600/E50914/FFFFFF?text=Stranger+Things&font=rajdhani"},
-    {"title": "The Crown", "url": "https://placehold.co/400x600/221f1f/FFFFFF?text=The+Crown&font=rajdhani"},
-    {"title": "Squid Game", "url": "https://placehold.co/400x600/008000/FFFFFF?text=Squid+Game&font=rajdhani"},
-    {"title": "Wednesday", "url": "https://placehold.co/400x600/333333/FFFFFF?text=Wednesday&font=rajdhani"},
-    {"title": "Money Heist", "url": "https://placehold.co/400x600/E50914/FFFFFF?text=Money+Heist&font=rajdhani"},
-    {"title": "Bridgerton", "url": "https://placehold.co/400x600/B5A6C9/000000?text=Bridgerton&font=rajdhani"},
+    {"title": "Stranger Things", "url": "https://images.unsplash.com/photo-1594908900066-3f47337549d8?w=400&h=600&fit=crop"},
+    {"title": "The Crown", "url": "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&h=600&fit=crop"},
+    {"title": "Squid Game", "url": "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400&h=600&fit=crop"},
+    {"title": "Wednesday", "url": "https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=400&h=600&fit=crop"},
+    {"title": "Money Heist", "url": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&h=600&fit=crop"},
+    {"title": "Bridgerton", "url": "https://images.unsplash.com/photo-1519750783826-e2420f4d687f?w=400&h=600&fit=crop"},
 ]
 
 # --- PLATFORM LOGOS FOR SIDEBAR/FOOTER ---
@@ -60,174 +54,117 @@ PLATFORM_LOGOS = {
 # --- COLOR THEME DEFINITIONS ---
 COLOR_THEMES = {
     "🌿 Mint Dream (Light)": {
-        "primary": "#4CAF50",      # Green
-        "secondary": "#81C784",    # Lighter Green
-        "accent": "#A5D6A7",       # Pale Green
-        "bg_gradient": "linear-gradient(135deg, rgba(241,248,233,0.8) 0%, rgba(232,245,233,0.8) 50%, rgba(241,248,233,0.8) 100%)", # Made gradient semi-transparent
-        "chart_bg": "rgba(255, 255, 255, 0.6)",
-        "paper_bg": "rgba(255, 255, 255, 0.3)",
-        "text": "#212121", # Dark text for light background
-        "gridline_color": "#E0E0E0"
+        "primary": "#4CAF50", "secondary": "#81C784", "accent": "#A5D6A7",
+        "bg_gradient": "linear-gradient(135deg, rgba(241,248,233,0.8) 0%, rgba(232,245,233,0.8) 50%, rgba(241,248,233,0.8) 100%)",
+        "chart_bg": "rgba(255, 255, 255, 0.6)", "paper_bg": "rgba(255, 255, 255, 0.3)",
+        "text": "#212121", "gridline_color": "#E0E0E0"
     },
     "💜 Lavender Haze (Light)": {
-        "primary": "#7986CB",      # Purple
-        "secondary": "#9FA8DA",    # Lighter Purple
-        "accent": "#C5CAE9",       # Pale Purple
-        "bg_gradient": "linear-gradient(135deg, rgba(237,231,246,0.8) 0%, rgba(230,224,248,0.8) 50%, rgba(237,231,246,0.8) 100%)", # Made gradient semi-transparent
-        "chart_bg": "rgba(255, 255, 255, 0.6)",
-        "paper_bg": "rgba(255, 255, 255, 0.3)",
-        "text": "#212121", # Dark text
-        "gridline_color": "#E0E0E0"
+        "primary": "#7986CB", "secondary": "#9FA8DA", "accent": "#C5CAE9",
+        "bg_gradient": "linear-gradient(135deg, rgba(237,231,246,0.8) 0%, rgba(230,224,248,0.8) 50%, rgba(237,231,246,0.8) 100%)",
+        "chart_bg": "rgba(255, 255, 255, 0.6)", "paper_bg": "rgba(255, 255, 255, 0.3)",
+        "text": "#212121", "gridline_color": "#E0E0E0"
     },
     "🧡 Apricot Blush (Light)": {
-        "primary": "#FFB74D",      # Orange
-        "secondary": "#FFCC80",    # Lighter Orange
-        "accent": "#FFE0B2",       # Pale Orange
-        "bg_gradient": "linear-gradient(135deg, rgba(255,243,224,0.8) 0%, rgba(255,248,225,0.8) 50%, rgba(255,243,224,0.8) 100%)", # Made gradient semi-transparent
-        "chart_bg": "rgba(255, 255, 255, 0.6)",
-        "paper_bg": "rgba(255, 255, 255, 0.3)",
-        "text": "#212121", # Dark text
-        "gridline_color": "#E0E0E0"
+        "primary": "#FFB74D", "secondary": "#FFCC80", "accent": "#FFE0B2",
+        "bg_gradient": "linear-gradient(135deg, rgba(255,243,224,0.8) 0%, rgba(255,248,225,0.8) 50%, rgba(255,243,224,0.8) 100%)",
+        "chart_bg": "rgba(255, 255, 255, 0.6)", "paper_bg": "rgba(255, 255, 255, 0.3)",
+        "text": "#212121", "gridline_color": "#E0E0E0"
     },
     "💙 Sky Serenity (Light)": {
-        "primary": "#4FC3F7",      # Blue
-        "secondary": "#81D4FA",    # Lighter Blue
-        "accent": "#B3E5FC",       # Pale Blue
-        "bg_gradient": "linear-gradient(135deg, rgba(225,245,254,0.8) 0%, rgba(224,247,250,0.8) 50%, rgba(225,245,254,0.8) 100%)", # Made gradient semi-transparent
-        "chart_bg": "rgba(255, 255, 255, 0.6)",
-        "paper_bg": "rgba(255, 255, 255, 0.3)",
-        "text": "#212121", # Dark text
-        "gridline_color": "#E0E0E0"
+        "primary": "#4FC3F7", "secondary": "#81D4FA", "accent": "#B3E5FC",
+        "bg_gradient": "linear-gradient(135deg, rgba(225,245,254,0.8) 0%, rgba(224,247,250,0.8) 50%, rgba(225,245,254,0.8) 100%)",
+        "chart_bg": "rgba(255, 255, 255, 0.6)", "paper_bg": "rgba(255, 255, 255, 0.3)",
+        "text": "#212121", "gridline_color": "#E0E0E0"
     },
     "N» Netflix (Light)": {
-        "primary": "#E50914",      # Netflix Red
-        "secondary": "#221f1f",    # Netflix Black
-        "accent": "#B81D24",       # Darker Red
-        "bg_gradient": "linear-gradient(135deg, rgba(250,250,250,0.8) 0%, rgba(240,240,240,0.8) 50%, rgba(250,250,250,0.8) 100%)", # Light gray gradient
-        "chart_bg": "rgba(255, 255, 255, 0.6)",
-        "paper_bg": "rgba(255, 255, 255, 0.3)",
-        "text": "#212121", # Dark text
-        "gridline_color": "#E0E0E0"
+        "primary": "#E50914", "secondary": "#221f1f", "accent": "#B81D24",
+        "bg_gradient": "linear-gradient(135deg, rgba(250,250,250,0.8) 0%, rgba(240,240,240,0.8) 50%, rgba(250,250,250,0.8) 100%)",
+        "chart_bg": "rgba(255, 255, 255, 0.6)", "paper_bg": "rgba(255, 255, 255, 0.3)",
+        "text": "#212121", "gridline_color": "#E0E0E0"
     },
     "G» Google Looker (Light)": {
-        "primary": "#4285F4",      # Google Blue
-        "secondary": "#34A853",    # Google Green
-        "accent": "#FBBC05",       # Google Yellow
+        "primary": "#4285F4", "secondary": "#34A853", "accent": "#FBBC05",
         "bg_gradient": "linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(248,249,250,0.8) 50%, rgba(255,255,255,0.8) 100%)",
-        "chart_bg": "rgba(255, 255, 255, 0.6)",
-        "paper_bg": "rgba(255, 255, 255, 0.3)",
-        "text": "#212121",
-        "gridline_color": "#E0E0E0"
+        "chart_bg": "rgba(255, 255, 255, 0.6)", "paper_bg": "rgba(255, 255, 255, 0.3)",
+        "text": "#212121", "gridline_color": "#E0E0E0"
     },
     "T» Tableau (Light)": {
-        "primary": "#1F77B4",      # Tableau Blue
-        "secondary": "#FF7F0E",    # Tableau Orange
-        "accent": "#2CA02C",       # Tableau Green
+        "primary": "#1F77B4", "secondary": "#FF7F0E", "accent": "#2CA02C",
         "bg_gradient": "linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(245,245,245,0.8) 50%, rgba(255,255,255,0.8) 100%)",
-        "chart_bg": "rgba(255, 255, 255, 0.6)",
-        "paper_bg": "rgba(255, 255, 255, 0.3)",
-        "text": "#212121",
-        "gridline_color": "#DCDCDC"
+        "chart_bg": "rgba(255, 255, 255, 0.6)", "paper_bg": "rgba(255, 255, 255, 0.3)",
+        "text": "#212121", "gridline_color": "#DCDCDC"
     },
     "🔵 Cyberpunk Blue (Dark)": {
-        "primary": "#00f5ff",
-        "secondary": "#00a8ff",
-        "accent": "#0077ff",
-        "bg_gradient": "linear-gradient(135deg, rgba(10,14,39,0.85) 0%, rgba(26,29,58,0.85) 50%, rgba(15,17,35,0.85) 100%)", # Made gradient semi-transparent
-        "chart_bg": "rgba(10, 14, 39, 0.6)",
-        "paper_bg": "rgba(10, 14, 39, 0.3)",
-        "text": "#a0d8f1"
+        "primary": "#00f5ff", "secondary": "#00a8ff", "accent": "#0077ff",
+        "bg_gradient": "linear-gradient(135deg, rgba(10,14,39,0.85) 0%, rgba(26,29,58,0.85) 50%, rgba(15,17,35,0.85) 100%)",
+        "chart_bg": "rgba(10, 14, 39, 0.6)", "paper_bg": "rgba(10, 14, 39, 0.3)",
+        "text": "#a0d8f1", "gridline_color": "rgba(0, 245, 255, 0.1)"
     },
     "🟣 Neon Purple (Dark)": {
-        "primary": "#bf00ff",
-        "secondary": "#8800ff",
-        "accent": "#ff00ff",
-        "bg_gradient": "linear-gradient(135deg, rgba(26,0,51,0.85) 0%, rgba(45,0,77,0.85) 50%, rgba(26,0,51,0.85) 100%)", # Made gradient semi-transparent
-        "chart_bg": "rgba(42, 0, 77, 0.6)",
-        "paper_bg": "rgba(26, 0, 51, 0.3)",
-        "text": "#e0b3ff"
+        "primary": "#bf00ff", "secondary": "#8800ff", "accent": "#ff00ff",
+        "bg_gradient": "linear-gradient(135deg, rgba(26,0,51,0.85) 0%, rgba(45,0,77,0.85) 50%, rgba(26,0,51,0.85) 100%)",
+        "chart_bg": "rgba(42, 0, 77, 0.6)", "paper_bg": "rgba(26, 0, 51, 0.3)",
+        "text": "#e0b3ff", "gridline_color": "rgba(191, 0, 255, 0.1)"
     },
     "🧬 Cyberpunk Mix (Dark)": {
-        "primary": "#FF00FF",      # Magenta
-        "secondary": "#00FFFF",    # Cyan
-        "accent": "#FFFF00",       # Yellow
-        "bg_gradient": "linear-gradient(135deg, rgba(20,0,30,0.85) 0%, rgba(40,0,50,0.85) 50%, rgba(20,0,30,0.85) 100%)", # Dark purple gradient
-        "chart_bg": "rgba(30, 0, 40, 0.6)",
-        "paper_bg": "rgba(50, 0, 60, 0.3)",
-        "text": "#F0F0F0"
+        "primary": "#FF00FF", "secondary": "#00FFFF", "accent": "#FFFF00",
+        "bg_gradient": "linear-gradient(135deg, rgba(20,0,30,0.85) 0%, rgba(40,0,50,0.85) 50%, rgba(20,0,30,0.85) 100%)",
+        "chart_bg": "rgba(30, 0, 40, 0.6)", "paper_bg": "rgba(50, 0, 60, 0.3)",
+        "text": "#F0F0F0", "gridline_color": "rgba(255, 0, 255, 0.1)"
     },
     "🟢 Matrix Green (Dark)": {
-        "primary": "#00ff41",
-        "secondary": "#00cc33",
-        "accent": "#39ff14",
-        "bg_gradient": "linear-gradient(135deg, rgba(0,26,13,0.85) 0%, rgba(0,51,25,0.85) 50%, rgba(0,26,13,0.85) 100%)", # Made gradient semi-transparent
-        "chart_bg": "rgba(0, 51, 25, 0.6)",
-        "paper_bg": "rgba(0, 26, 13, 0.3)",
-        "text": "#b3ffcc"
+        "primary": "#00ff41", "secondary": "#00cc33", "accent": "#39ff14",
+        "bg_gradient": "linear-gradient(135deg, rgba(0,26,13,0.85) 0%, rgba(0,51,25,0.85) 50%, rgba(0,26,13,0.85) 100%)",
+        "chart_bg": "rgba(0, 51, 25, 0.6)", "paper_bg": "rgba(0, 26, 13, 0.3)",
+        "text": "#b3ffcc", "gridline_color": "rgba(0, 255, 65, 0.1)"
     },
     "🔴 Netflix Red (Dark)": {
-        "primary": "#E50914",
-        "secondary": "#B20710",
-        "accent": "#831010",
-        "bg_gradient": "linear-gradient(135deg, rgba(15,1,1,0.85) 0%, rgba(26,2,2,0.85) 50%, rgba(15,1,1,0.85) 100%)", # Made gradient semi-transparent
-        "chart_bg": "rgba(51, 5, 5, 0.6)",
-        "paper_bg": "rgba(26, 2, 2, 0.3)",
-        "text": "#ffb3b3"
+        "primary": "#E50914", "secondary": "#B20710", "accent": "#831010",
+        "bg_gradient": "linear-gradient(135deg, rgba(15,1,1,0.85) 0%, rgba(26,2,2,0.85) 50%, rgba(15,1,1,0.85) 100%)",
+        "chart_bg": "rgba(51, 5, 5, 0.6)", "paper_bg": "rgba(26, 2, 2, 0.3)",
+        "text": "#ffb3b3", "gridline_color": "rgba(229, 9, 20, 0.1)"
     },
     "🟠 Sunset Orange (Dark)": {
-        "primary": "#ff6b35",
-        "secondary": "#ff8c42",
-        "accent": "#ffa600",
-        "bg_gradient": "linear-gradient(135deg, rgba(26,15,0,0.85) 0%, rgba(51,31,0,0.85) 50%, rgba(26,15,0,0.85) 100%)", # Made gradient semi-transparent
-        "chart_bg": "rgba(51, 31, 0, 0.6)",
-        "paper_bg": "rgba(26, 15, 0, 0.3)",
-        "text": "#ffd6b3"
+        "primary": "#ff6b35", "secondary": "#ff8c42", "accent": "#ffa600",
+        "bg_gradient": "linear-gradient(135deg, rgba(26,15,0,0.85) 0%, rgba(51,31,0,0.85) 50%, rgba(26,15,0,0.85) 100%)",
+        "chart_bg": "rgba(51, 31, 0, 0.6)", "paper_bg": "rgba(26, 15, 0, 0.3)",
+        "text": "#ffd6b3", "gridline_color": "rgba(255, 107, 53, 0.1)"
     },
     "🩵 Ice Blue (Dark)": {
-        "primary": "#5dfdcb",
-        "secondary": "#7cc6fe",
-        "accent": "#96efff",
-        "bg_gradient": "linear-gradient(135deg, rgba(0,26,31,0.85) 0%, rgba(0,51,68,0.85) 50%, rgba(0,26,31,0.85) 100%)", # Made gradient semi-transparent
-        "chart_bg": "rgba(0, 51, 68, 0.6)",
-        "paper_bg": "rgba(0, 26, 31, 0.3)",
-        "text": "#c8f4f9"
+        "primary": "#5dfdcb", "secondary": "#7cc6fe", "accent": "#96efff",
+        "bg_gradient": "linear-gradient(135deg, rgba(0,26,31,0.85) 0%, rgba(0,51,68,0.85) 50%, rgba(0,26,31,0.85) 100%)",
+        "chart_bg": "rgba(0, 51, 68, 0.6)", "paper_bg": "rgba(0, 26, 31, 0.3)",
+        "text": "#c8f4f9", "gridline_color": "rgba(93, 253, 203, 0.1)"
     },
     "💛 Golden Hour (Dark)": {
-        "primary": "#FFD700",
-        "secondary": "#FFA500",
-        "accent": "#FF8C00",
-        "bg_gradient": "linear-gradient(135deg, rgba(26,20,0,0.85) 0%, rgba(51,40,0,0.85) 50%, rgba(26,20,0,0.85) 100%)", # Made gradient semi-transparent
-        "chart_bg": "rgba(51, 40, 0, 0.6)",
-        "paper_bg": "rgba(26, 20, 0, 0.3)",
-        "text": "#ffe6b3"
+        "primary": "#FFD700", "secondary": "#FFA500", "accent": "#FF8C00",
+        "bg_gradient": "linear-gradient(135deg, rgba(26,20,0,0.85) 0%, rgba(51,40,0,0.85) 50%, rgba(26,20,0,0.85) 100%)",
+        "chart_bg": "rgba(51, 40, 0, 0.6)", "paper_bg": "rgba(26, 20, 0, 0.3)",
+        "text": "#ffe6b3", "gridline_color": "rgba(255, 215, 0, 0.1)"
     },
     "💗 Rose Pink (Dark)": {
-        "primary": "#ff1493",
-        "secondary": "#ff69b4",
-        "accent": "#ff85c1",
-        "bg_gradient": "linear-gradient(135deg, rgba(26,0,16,0.85) 0%, rgba(51,0,32,0.85) 50%, rgba(26,0,16,0.85) 100%)", # Made gradient semi-transparent
-        "chart_bg": "rgba(51, 0, 32, 0.6)",
-        "paper_bg": "rgba(26, 0, 16, 0.3)",
-        "text": "#ffb3de"
+        "primary": "#ff1493", "secondary": "#ff69b4", "accent": "#ff85c1",
+        "bg_gradient": "linear-gradient(135deg, rgba(26,0,16,0.85) 0%, rgba(51,0,32,0.85) 50%, rgba(26,0,16,0.85) 100%)",
+        "chart_bg": "rgba(51, 0, 32, 0.6)", "paper_bg": "rgba(26, 0, 16, 0.3)",
+        "text": "#ffb3de", "gridline_color": "rgba(255, 20, 147, 0.1)"
     }
 }
 
 # --- DYNAMIC CSS GENERATOR ---
 def generate_theme_css(theme):
-    # Determine text color for buttons based on background lightness
     text_on_primary = "#212121" if theme["text"] == "#212121" else "#FFFFFF"
 
-    # --- NEW: Conditional Header Styling ---
-    if theme["text"] == "#212121": # This is a light theme
+    if theme["text"] == "#212121":
         header_style = f"""
         h1, h2, h3 {{
             font-family: 'Orbitron', sans-serif !important;
-            color: {theme["text"]}; /* Use dark text color directly */
-            text-shadow: 0 0 5px {hex_to_rgba(theme["primary"], 0.3)}; /* Subtle shadow */
+            color: {theme["text"]};
+            text-shadow: 0 0 5px {hex_to_rgba(theme["primary"], 0.3)};
             letter-spacing: 2px;
         }}
         """
-    else: # This is a dark theme
+    else:
         header_style = f"""
         h1, h2, h3 {{
             font-family: 'Orbitron', sans-serif !important;
@@ -236,29 +173,24 @@ def generate_theme_css(theme):
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 30px {hex_to_rgba(theme["primary"], 0.5)};
             letter-spacing: 2px;
-            color: {theme["text"]}; /* Fallback for non-webkit browsers */
+            color: {theme["text"]};
         }}
         """
-    # --- END NEW SECTION ---
 
     return f"""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
         
         .stApp {{
-            /* --- MODIFIED: Added background image --- */
-            /* Using the uploaded image_b7e8dd.jpg */
-            background-image: {theme["bg_gradient"]}, url("image_b7e8dd.jpg");
+            background-image: {theme["bg_gradient"]}, url("https://images.unsplash.com/photo-1574267432644-f65b5fe8fb11?w=1920&h=1080&fit=crop");
             background-size: cover;
             background-attachment: fixed;
             background-position: center center;
-            /* --- END MODIFICATION --- */
-            
             font-family: 'Rajdhani', sans-serif;
             color: {theme["text"]};
         }}
         
-        {header_style} /* Inject conditional header style */
+        {header_style}
         
         .stTabs [data-baseweb="tab-list"] {{
             gap: 8px;
@@ -289,17 +221,11 @@ def generate_theme_css(theme):
         
         .stTabs [aria-selected="true"] {{
             background: linear-gradient(135deg, {theme["accent"]}, {theme["secondary"]}) !important;
-            
-            /* --- THIS IS THE FIX --- */
-            /* Removed the broken hex_to_rgba call and replaced with a valid string */
             box-shadow: 0 0 30px {hex_to_rgba(theme["primary"], 0.8)}, inset 0 0 20px rgba(255, 255, 255, 0.1);
-            /* --- END OF FIX --- */
-
             border-color: {theme["primary"]} !important;
-            color: {text_on_primary} !important; /* Ensure text is visible on light themes */
+            color: {text_on_primary} !important;
         }}
         
-        /* Adjust tab text color for light themes */
         .stTabs [aria-selected="true"] p {{
             color: {text_on_primary} !important; 
         }}
@@ -355,14 +281,13 @@ def generate_theme_css(theme):
         }}
         
         .stRadio > label {{
-            color: {theme["text"]}; /* Changed from primary to text for light themes */
+            color: {theme["text"]};
             font-family: 'Rajdhani', sans-serif;
             font-weight: 600;
         }}
         
         [data-testid="stSidebar"] {{
-            /* Modified to stack gradient over image */
-            background-image: {theme["bg_gradient"]}, url("image_b7e8dd.jpg");
+            background-image: {theme["bg_gradient"]}, url("https://images.unsplash.com/photo-1574267432644-f65b5fe8fb11?w=1920&h=1080&fit=crop");
             background-size: cover;
             background-position: center center;
             border-right: 2px solid {hex_to_rgba(theme["primary"], 0.3)};
@@ -380,7 +305,7 @@ def generate_theme_css(theme):
         
         .stButton > button {{
             background: linear-gradient(135deg, {theme["accent"]}, {theme["secondary"]});
-            color: {text_on_primary}; /* Use white or black text based on theme */
+            color: {text_on_primary};
             border: 2px solid {theme["primary"]};
             border-radius: 10px;
             font-family: 'Orbitron', sans-serif;
@@ -406,7 +331,6 @@ def generate_theme_css(theme):
             color: {theme["text"]};
         }}
         
-        /* --- NEW: Show Card Styling for Homepage --- */
         .show-card {{
             border-radius: 10px;
             overflow: hidden;
@@ -426,12 +350,10 @@ def generate_theme_css(theme):
             from {{ text-shadow: 0 0 20px {hex_to_rgba(theme["primary"], 0.5)}; }}
             to {{ text-shadow: 0 0 40px {hex_to_rgba(theme["primary"], 0.8)}; }}
         }}
-        /* --- END NEW --- */
-
     </style>
     """
 
-# --- FUTURISTIC CONFIGURATION ---
+# --- CONFIGURATION ---
 st.set_page_config(
     page_title="Strategic OTT Content Analysis Dashboard",
     page_icon="🎬",
@@ -441,17 +363,13 @@ st.set_page_config(
 
 # --- SESSION STATE ---
 if 'page' not in st.session_state:
-    st.session_state.page = 'home' # Default to home
+    st.session_state.page = 'home'
 
-# --- DATA LOADING & UTILITY FUNCTIONS ---
-
+# --- DATA LOADING ---
 @st.cache_data
 def load_netflix_data():
-    """Loads the main Netflix dataset and cleans it for H2 and H3."""
     try:
         df = pd.read_csv('netflix_titles (1).csv')
-        
-        # Clean data for H3 (International Growth)
         df['country'] = df['country'].fillna('Unknown')
         df['is_us'] = df['country'].apply(lambda x: 'United States' in x)
         
@@ -460,27 +378,20 @@ def load_netflix_data():
             return str(country_str).split(',')[0].strip()
 
         df['origin_country'] = df['country'].apply(get_primary_country)
-        
-        # Clean data for H2 (Recency)
         df['release_year'] = pd.to_numeric(df['release_year'], errors='coerce')
         df = df.dropna(subset=['release_year'])
         df['release_year'] = df['release_year'].astype(int)
         df['period'] = df['release_year'].apply(lambda x: 'After 2015' if x > 2015 else 'Before/On 2015')
-        
-        # --- NEW SECTION FOR SEABORN ---
-        # Clean duration for statistical plots
         df['runtime_min'] = df[df['type'] == 'Movie']['duration'].str.replace(' min', '', regex=False).astype(float)
         df['num_seasons'] = df[df['type'] == 'TV Show']['duration'].str.replace(' Seasons', '', regex=False).str.replace(' Season', '', regex=False).astype(float)
-        # --- END NEW SECTION ---
         
         return df
     except FileNotFoundError:
-        st.error("Error: 'netflix_titles (1).csv' not found. Please upload the file.")
+        st.error("Error: 'netflix_titles (1).csv' not found.")
         return pd.DataFrame()
 
 @st.cache_data
 def load_platform_comparison_data():
-    """Loads and combines data from all 6 platforms for H1."""
     platform_dfs = []
     
     def load_standard_platform(filename, platform_name, country_col='country'):
@@ -524,7 +435,7 @@ def load_platform_comparison_data():
     
     return all_platforms
 
-# --- HOMEPAGE RENDER FUNCTION ---
+# --- HOMEPAGE ---
 def render_homepage(theme):
     st.markdown(f"""
         <div style='text-align: center; padding: 50px 20px; background: {theme["chart_bg"]}; border-radius: 20px; border: 3px solid {theme["primary"]}; margin-bottom: 40px; box-shadow: 0 0 50px {hex_to_rgba(theme["primary"], 0.3)};'>
@@ -540,7 +451,6 @@ def render_homepage(theme):
         </div>
     """, unsafe_allow_html=True)
     
-    # Featured Shows Gallery
     st.markdown(f"<h2 style='text-align: center; font-family: Orbitron; margin-top: 40px; margin-bottom: 30px;'>🌟 Featured Content 🌟</h2>", unsafe_allow_html=True)
     
     cols = st.columns(3)
@@ -549,6 +459,9 @@ def render_homepage(theme):
             st.markdown(f"""
                 <div class='show-card'>
                     <img src='{show["url"]}' style='width: 100%; height: 400px; object-fit: cover;' />
+                    <div style# CONTINUATION FROM PART 1 - Homepage and Hypothesis Functions
+
+# (Continuing from render_homepage function)
                     <div style='padding: 15px; background: {theme["paper_bg"]}; text-align: center;'>
                         <h4 style='color: {theme["text"]}; font-family: Orbitron; margin: 0;'>{show["title"]}</h4>
                     </div>
@@ -556,7 +469,6 @@ def render_homepage(theme):
             """, unsafe_allow_html=True)
             st.markdown("<br>", unsafe_allow_html=True)
     
-    # Key Features
     st.markdown("---")
     st.markdown(f"<h2 style='text-align: center; font-family: Orbitron; margin-top: 40px; margin-bottom: 30px;'>📊 Platform Features</h2>", unsafe_allow_html=True)
     
@@ -579,7 +491,6 @@ def render_homepage(theme):
                 </div>
             """, unsafe_allow_html=True)
     
-    # Launch Button
     st.markdown("<br><br>", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
@@ -588,19 +499,15 @@ def render_homepage(theme):
             st.rerun()
 
 # --- HYPOTHESIS 1: LOCAL LANGUAGE ---
-
 def render_H1_local_language(df, theme):
-    st.header("🌐 Hypothesis 1: Local-Language Representation")
+    st.header("🌍 Hypothesis 1: Local-Language Representation")
     
-    # Get valid grid color
-    grid_color = theme.get("gridline_color", hex_to_rgba(theme["primary"], 0.1))
+    grid_color = theme.get("gridline_color", "#E0E0E0")
 
-    # Advanced control panel in sidebar
     with st.sidebar:
         st.markdown("### 🎛️ CONTROL PANEL (H1)")
         st.markdown("---")
         
-        # Year range slider with enhanced display
         min_year = int(df['release_year'].min())
         max_year = int(df['release_year'].max())
         
@@ -614,7 +521,6 @@ def render_H1_local_language(df, theme):
             help="Filter content by release year to analyze temporal trends"
         )
         
-        # Platform selector with multi-select
         all_platforms = sorted(df['platform'].unique())
         selected_platforms = st.multiselect(
             "🎬 Select Platforms",
@@ -624,7 +530,6 @@ def render_H1_local_language(df, theme):
             help="Choose which platforms to include in the analysis"
         )
         
-        # View mode
         view_mode = st.radio(
             "📊 Visualization Mode",
             ["Absolute Values", "Percentage View"],
@@ -632,7 +537,6 @@ def render_H1_local_language(df, theme):
             help="Toggle between raw counts and percentage distribution"
         )
         
-        # Chart type for trend
         trend_type = st.selectbox(
             "📈 Trend Chart Type",
             ["Line Chart", "Area Chart", "Scatter Plot"],
@@ -640,13 +544,11 @@ def render_H1_local_language(df, theme):
             help="Select visualization style for temporal trends"
         )
     
-    # Filter data
     df_filtered = df[
         (df['release_year'].between(year_range[0], year_range[1])) &
         (df['platform'].isin(selected_platforms))
     ]
     
-    # Metrics row with Netflix emojis
     col_m1, col_m2, col_m3, col_m4 = st.columns(4)
     
     with col_m1:
@@ -673,7 +575,6 @@ def render_H1_local_language(df, theme):
     
     col1, col2 = st.columns(2)
     
-    # Viz 1: Enhanced Bar Chart with custom styling
     with col1:
         ratio_df = df_filtered.groupby('platform')['is_local'].agg(['mean', 'sum', 'count']).reset_index()
         ratio_df['local_ratio'] = ratio_df['mean'] * 100
@@ -710,12 +611,12 @@ def render_H1_local_language(df, theme):
             xaxis=dict(
                 title=dict(text="Platform", font=dict(color=theme["secondary"])),
                 tickfont=dict(color=theme["text"]),
-                gridcolor=grid_color # FIXED: Using variable
+                gridcolor=grid_color
             ),
             yaxis=dict(
                 title=dict(text="Local Content Ratio (%)", font=dict(color=theme["secondary"])),
                 tickfont=dict(color=theme["text"]),
-                gridcolor=grid_color # FIXED: Using variable
+                gridcolor=grid_color
             ),
             plot_bgcolor=theme["chart_bg"],
             paper_bgcolor=theme["paper_bg"],
@@ -726,7 +627,6 @@ def render_H1_local_language(df, theme):
         
         st.plotly_chart(fig_ratio, use_container_width=True)
 
-    # Viz 2: Enhanced Trend Chart
     with col2:
         trend_agg = df_filtered.groupby(['platform', 'release_year'])['is_local'].mean().reset_index()
         trend_agg['local_ratio'] = trend_agg['is_local'] * 100
@@ -752,7 +652,7 @@ def render_H1_local_language(df, theme):
                 color="platform",
                 title=f"📈 Localization Trend ({year_range[0]}-{year_range[1]})"
             )
-        else:  # Scatter Plot
+        else:
             fig_trend = px.scatter(
                 trend_agg,
                 x="release_year",
@@ -771,13 +671,13 @@ def render_H1_local_language(df, theme):
                 title="Release Year",
                 titlefont=dict(color=theme["secondary"]),
                 tickfont=dict(color=theme["text"]),
-                gridcolor=grid_color # FIXED: Using variable
+                gridcolor=grid_color
             ),
             yaxis=dict(
                 title="Local Content Ratio (%)",
                 titlefont=dict(color=theme["secondary"]),
                 tickfont=dict(color=theme["text"]),
-                gridcolor=grid_color # FIXED: Using variable
+                gridcolor=grid_color
             ),
             plot_bgcolor=theme["chart_bg"],
             paper_bgcolor=theme["paper_bg"],
@@ -794,12 +694,10 @@ def render_H1_local_language(df, theme):
         
         st.plotly_chart(fig_trend, use_container_width=True)
     
-    # Additional insights expander
     with st.expander("🔍 Advanced Analytics & Insights (H1)"):
         col_a1, col_a2 = st.columns(2)
         
         with col_a1:
-            # Platform comparison table
             st.markdown("#### 📊 Platform Comparison Matrix")
             comparison_df = df_filtered.groupby('platform').agg({
                 'is_local': ['mean', 'sum', 'count']
@@ -809,23 +707,18 @@ def render_H1_local_language(df, theme):
             st.dataframe(comparison_df, use_container_width=True)
         
         with col_a2:
-            # Growth rate analysis
             st.markdown("#### 📈 Year-over-Year Growth Rate (Local Content Ratio)")
             if len(trend_agg) > 0:
                 pivot_df = trend_agg.pivot(index='release_year', columns='platform', values='local_ratio')
                 growth_rate = pivot_df.pct_change() * 100
                 st.dataframe(growth_rate.tail(5).round(2), use_container_width=True)
 
-
 # --- HYPOTHESIS 2: RECENCY ---
-
 def render_H2_recency(df, theme):
     st.header("⏰ Hypothesis 2: Content Recency Analysis")
     
-    # Get valid grid color
-    grid_color = theme.get("gridline_color", hex_to_rgba(theme["primary"], 0.1))
+    grid_color = theme.get("gridline_color", "#E0E0E0")
 
-    # Sidebar controls
     with st.sidebar:
         st.markdown("### ⚙️ RECENCY CONTROLS (H2)")
         st.markdown("---")
@@ -847,7 +740,6 @@ def render_H2_recency(df, theme):
         
         show_statistics = st.checkbox("📊 Show Statistical Summary", value=True, key='h2_show_stats')
     
-    # Apply filters
     df_filtered = df.copy()
     if content_type_filter == "Movies Only":
         df_filtered = df_filtered[df_filtered['type'] == 'Movie']
@@ -858,7 +750,6 @@ def render_H2_recency(df, theme):
         lambda x: f'After {year_cutoff}' if x > year_cutoff else f'Before/On {year_cutoff}'
     )
     
-    # Metrics with Netflix emojis
     col_m1, col_m2, col_m3, col_m4 = st.columns(4)
     
     recent_count = len(df_filtered[df_filtered['release_year'] > year_cutoff])
@@ -885,7 +776,6 @@ def render_H2_recency(df, theme):
     
     col1, col2 = st.columns(2)
 
-    # Viz 1: Enhanced Histogram with gradient
     with col1:
         df_hist = df_filtered[df_filtered['release_year'] > 1920]
         
@@ -906,7 +796,6 @@ def render_H2_recency(df, theme):
             hovertemplate='<b>Year: %{x}</b><br>Titles: %{y}<extra></extra>'
         ))
         
-        # Add vertical line for cutoff
         fig_hist.add_vline(
             x=year_cutoff,
             line_dash="dash",
@@ -926,13 +815,13 @@ def render_H2_recency(df, theme):
                 title="Release Year",
                 titlefont=dict(color=theme["secondary"]),
                 tickfont=dict(color=theme["text"]),
-                gridcolor=grid_color # FIXED: Using variable
+                gridcolor=grid_color
             ),
             yaxis=dict(
                 title="Number of Titles",
                 titlefont=dict(color=theme["secondary"]),
                 tickfont=dict(color=theme["text"]),
-                gridcolor=grid_color # FIXED: Using variable
+                gridcolor=grid_color
             ),
             plot_bgcolor=theme["chart_bg"],
             paper_bgcolor=theme["paper_bg"],
@@ -943,11 +832,9 @@ def render_H2_recency(df, theme):
         
         st.plotly_chart(fig_hist, use_container_width=True)
 
-    # Viz 2: --- MODIFIED: Replaced Donut with Stacked Area (Swimlane) ---
     with col2:
         st.subheader("Content Type Production Over Time (Swimlane)")
         
-        # Filter for recent years to make the swimlane readable
         df_swim = df_filtered[df_filtered['release_year'] > 2000]
         
         df_stacked = df_swim.groupby(['release_year', 'type']).size().reset_index(name='count')
@@ -974,13 +861,13 @@ def render_H2_recency(df, theme):
                 title="Release Year",
                 titlefont=dict(color=theme["secondary"]),
                 tickfont=dict(color=theme["text"]),
-                gridcolor=grid_color # FIXED: Using variable
+                gridcolor=grid_color
             ),
             yaxis=dict(
                 title="Number of Titles Added",
                 titlefont=dict(color=theme["secondary"]),
                 tickfont=dict(color=theme["text"]),
-                gridcolor=grid_color # FIXED: Using variable
+                gridcolor=grid_color
             ),
             plot_bgcolor=theme["chart_bg"],
             paper_bgcolor=theme["paper_bg"],
@@ -996,7 +883,6 @@ def render_H2_recency(df, theme):
         
         st.plotly_chart(fig_area, use_container_width=True)
     
-    # Statistics panel
     if show_statistics:
         with st.expander("📈 Statistical Analysis (H2)"):
             col_s1, col_s2, col_s3 = st.columns(3)
@@ -1021,15 +907,11 @@ def render_H2_recency(df, theme):
                     st.markdown("#### ⭐ Recency Score")
                     recency_score = (recent_count / len(df_filtered) * 100) if len(df_filtered) > 0 else 0
                     st.write(f"**Score:** {recency_score:.1f}%")
-            else:
-                st.write("No data available for statistics.")
 
 # --- HYPOTHESIS 3: INTERNATIONAL GROWTH ---
-
 def render_H3_international_growth(df, theme):
     st.header("🌎 Hypothesis 3: International Content Sourcing")
     
-    # Sidebar controls
     with st.sidebar:
         st.markdown("### 🗺️ GEOGRAPHY CONTROLS (H3)")
         st.markdown("---")
@@ -1057,7 +939,6 @@ def render_H3_international_growth(df, theme):
             key='h3_type_filter'
         )
         
-    # Apply content type filter
     df_non_us = df[df['is_us'] == False].copy()
     if content_type != "All":
         df_non_us = df_non_us[df_non_us['type'] == content_type]
@@ -1066,7 +947,6 @@ def render_H3_international_growth(df, theme):
         st.warning("⚠️ No non-U.S. content found for the selected type.")
         return
 
-    # Metrics with emojis
     col_m1, col_m2, col_m3 = st.columns(3)
 
     total_non_us = len(df_non_us)
@@ -1084,7 +964,6 @@ def render_H3_international_growth(df, theme):
 
     st.markdown("---")
     
-    # --- Viz 1: Choropleth Map (Interactive) ---
     st.subheader(f"🗺️ Global Sourcing Map (Titles ≥ {min_content_count})")
     
     country_counts = df_non_us['origin_country'].value_counts().reset_index()
@@ -1100,7 +979,7 @@ def render_H3_international_growth(df, theme):
         color='Count',
         hover_name='Country',
         color_continuous_scale=px.colors.sequential.Sunsetdark,
-        title='🌐 Volume of Content by Primary Non-U.S. Origin Country',
+        title='🌍 Volume of Content by Primary Non-U.S. Origin Country',
         template='plotly_dark'
     )
     fig_map.update_geos(
@@ -1123,11 +1002,9 @@ def render_H3_international_growth(df, theme):
     )
     st.plotly_chart(fig_map, use_container_width=True)
 
-    # --- Viz 2: Treemap (Interactive) ---
     st.subheader(f"🎭 Treemap: {treemap_level} by Genre")
     
     df_non_us_genres = df_non_us.copy()
-    # Ensure 'listed_in' column exists (it is in netflix_titles (1).csv)
     if 'listed_in' not in df_non_us_genres.columns:
         st.warning("⚠️ The 'listed_in' column is missing for genre analysis in H3.")
         return
@@ -1160,7 +1037,6 @@ def render_H3_international_growth(df, theme):
     )
     st.plotly_chart(fig_tree, use_container_width=True)
 
-
 # --- HYPOTHESIS 4: SEABORN STATISTICAL ANALYSIS ---
 def render_H4_seaborn_analysis(df, theme):
     st.header("📊 Bonus: Seaborn Statistical Analysis")
@@ -1171,19 +1047,12 @@ def render_H4_seaborn_analysis(df, theme):
     </p>
     """, unsafe_allow_html=True)
 
-    # Set Seaborn theme properties based on the selected Streamlit theme
-    # This creates a more integrated feel
-    
-    # --- THIS IS THE CRITICAL FIX ---
-    # Convert rgba string to matplotlib-compatible tuple
     mpl_fig_bg = rgba_string_to_mpl_tuple(theme["chart_bg"])
     mpl_axes_bg = rgba_string_to_mpl_tuple(theme["paper_bg"])
     mpl_grid_color = theme.get("gridline_color", hex_to_rgba(theme["primary"], 0.2))
     
-    # Ensure grid color is not an rgba string if it's from a dark theme
     if "rgba" in str(mpl_grid_color):
         mpl_grid_color = rgba_string_to_mpl_tuple(mpl_grid_color)
-    # --- END OF FIX ---
         
     sns.set_theme(style="darkgrid", rc={
         "figure.facecolor": mpl_fig_bg,
@@ -1203,15 +1072,13 @@ def render_H4_seaborn_analysis(df, theme):
         
         if df_movies.empty:
             st.warning("No movie data available for runtime analysis.")
-            return
-
-        # Create Matplotlib figure
-        fig, ax = plt.subplots()
-        sns.kdeplot(df_movies['runtime_min'], fill=True, color=theme["primary"], ax=ax)
-        ax.set_title("Density of Movie Runtimes")
-        ax.set_xlabel("Runtime (Minutes)")
-        ax.set_ylabel("Density")
-        st.pyplot(fig)
+        else:
+            fig, ax = plt.subplots()
+            sns.kdeplot(df_movies['runtime_min'], fill=True, color=theme["primary"], ax=ax)
+            ax.set_title("Density of Movie Runtimes")
+            ax.set_xlabel("Runtime (Minutes)")
+            ax.set_ylabel("Density")
+            st.pyplot(fig)
 
     with col2:
         st.subheader("TV Show Season Count")
@@ -1219,30 +1086,25 @@ def render_H4_seaborn_analysis(df, theme):
         
         if df_tv.empty:
             st.warning("No TV show data available for season analysis.")
-            return
-
-        # Create Matplotlib figure
-        fig, ax = plt.subplots()
-        sns.histplot(df_tv['num_seasons'], discrete=True, color=theme["secondary"], ax=ax, shrink=0.8)
-        ax.set_title("Frequency of Season Counts")
-        ax.set_xlabel("Number of Seasons")
-        ax.set_ylabel("Count")
-        if not df_tv.empty:
-            # Handle potential float issues for xticks
-            try:
-                max_seasons = int(df_tv['num_seasons'].max())
-                if max_seasons > 0:
-                    ax.set_xticks(range(1, max_seasons + 1))
-            except ValueError:
-                pass # pass if max_seasons is NaN or invalid
-        st.pyplot(fig)
+        else:
+            fig, ax = plt.subplots()
+            sns.histplot(df_tv['num_seasons'], discrete=True, color=theme["secondary"], ax=ax, shrink=0.8)
+            ax.set_title("Frequency of Season Counts")
+            ax.set_xlabel("Number of Seasons")
+            ax.set_ylabel("Count")
+            if not df_tv.empty:
+                try:
+                    max_seasons = int(df_tv['num_seasons'].max())
+                    if max_seasons > 0:
+                        ax.set_xticks(range(1, max_seasons + 1))
+                except ValueError:
+                    pass
+            st.pyplot(fig)
         
     st.markdown("---")
     
-    # --- NEW: Violin Plot ---
     st.subheader("Violin Plot: Runtime Distribution by Rating")
     df_movies = df[df['runtime_min'].notna()].copy()
-    # Filter for top N ratings for clarity
     top_ratings = df_movies['rating'].value_counts().nlargest(8).index
     df_violin = df_movies[df_movies['rating'].isin(top_ratings)]
     
@@ -1259,13 +1121,13 @@ def render_H4_seaborn_analysis(df, theme):
             inner='quartile',
             linewidth=1.5
         )
+        ax.set_title("Movie Runtime Distribution by Age Rating (# CONTINUATION FROM PART 2 - Completing H4 and Main Dashboard Function")
+
         ax.set_title("Movie Runtime Distribution by Age Rating (Top 8)")
         ax.set_xlabel("Rating")
         ax.set_ylabel("Runtime (Minutes)")
         st.pyplot(fig)
-    # --- END NEW ---
         
-    # --- NEW: Seaborn Heatmap ---
     st.markdown("---")
     st.subheader("Genre vs. Decade Release Heatmap")
     
@@ -1275,9 +1137,8 @@ def render_H4_seaborn_analysis(df, theme):
         return
         
     df_heat['decade'] = (df_heat['release_year'] // 10) * 10
-    df_heat = df_heat[df_heat['decade'] >= 1980] # Filter for recent decades
+    df_heat = df_heat[df_heat['decade'] >= 1980]
     
-    # Explode genres
     if 'listed_in' not in df_heat.columns:
         st.warning("Column 'listed_in' not found for heatmap genre analysis.")
         return
@@ -1288,13 +1149,11 @@ def render_H4_seaborn_analysis(df, theme):
     top_genres = df_heat_exploded['genre'].value_counts().nlargest(10).index
     df_heat_filtered = df_heat_exploded[df_heat_exploded['genre'].isin(top_genres)]
     
-    # Create pivot table
     pivot_table = df_heat_filtered.pivot_table(index='genre', columns='decade', values='title', aggfunc='count', fill_value=0)
     
     if pivot_table.empty:
         st.warning("No data to display in heatmap with current filters.")
     else:
-        # Create Matplotlib figure
         fig, ax = plt.subplots(figsize=(12, 8))
         sns.heatmap(
             pivot_table, 
@@ -1309,17 +1168,14 @@ def render_H4_seaborn_analysis(df, theme):
         ax.set_xlabel("Decade")
         ax.set_ylabel("Genre")
         st.pyplot(fig)
-    # --- END NEW SECTION ---
 
 # --- DASHBOARD PAGE RENDER FUNCTION ---
 def render_dashboard_page(theme, selected_theme_name):
     """Renders the main analysis dashboard content."""
     
-    # Load all required dataframes
     df_netflix = load_netflix_data()
     df_comparison = load_platform_comparison_data()
 
-    # Custom Netflix-themed header
     st.markdown(f"""
         <div style='text-align: center; padding: 30px; background: {theme["chart_bg"]}; border-radius: 15px; border: 2px solid {theme["primary"]}; margin-bottom: 30px; box-shadow: 0 0 30px {hex_to_rgba(theme["primary"], 0.25)};'>
             <h1 style='font-family: Orbitron; font-size: 3.5rem; background: linear-gradient(90deg, {theme["primary"]}, {theme["secondary"]}, {theme["accent"]}); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 30px {hex_to_rgba(theme["primary"], 0.5)}; margin: 0;'>
@@ -1341,12 +1197,10 @@ def render_dashboard_page(theme, selected_theme_name):
     """, unsafe_allow_html=True)
     st.markdown("---")
     
-    # Check if data loaded successfully
     if df_netflix.empty and df_comparison.empty:
         st.error("⚠️ Cannot proceed. Please ensure all data files (especially netflix_titles (1).csv) are correctly placed and named.")
         return
 
-    # --- Hypothesis 1: Local Language ---
     if not df_comparison.empty:
         render_H1_local_language(df_comparison, theme)
     else:
@@ -1356,7 +1210,6 @@ def render_dashboard_page(theme, selected_theme_name):
     st.markdown("---")
     st.markdown("---")
 
-    # --- Hypothesis 2: Content Recency ---
     if not df_netflix.empty:
         render_H2_recency(df_netflix, theme)
     else:
@@ -1366,7 +1219,6 @@ def render_dashboard_page(theme, selected_theme_name):
     st.markdown("---")
     st.markdown("---")
 
-    # --- Hypothesis 3: Global Growth ---
     if not df_netflix.empty:
         render_H3_international_growth(df_netflix, theme)
     else:
@@ -1376,18 +1228,16 @@ def render_dashboard_page(theme, selected_theme_name):
     st.markdown("---")
     st.markdown("---")
 
-    # --- NEW: Hypothesis 4: Seaborn Analysis ---
     if not df_netflix.empty:
         render_H4_seaborn_analysis(df_netflix, theme)
     else:
         st.error("❌ Cannot run Hypothesis 4 (Seaborn Analysis). Check 'netflix_titles (1).csv'.")
     
-    # Footer with Netflix theme
     st.markdown("---")
     st.markdown(f"""
         <div style='text-align: center; padding: 25px; background: {theme["chart_bg"]}; border-radius: 10px; border: 1px solid {hex_to_rgba(theme["primary"], 0.25)}; margin-top: 30px;'>
             
-            <img src="https://placehold.co/600x100/{theme['paper_bg'].lstrip('#').replace('rgba(', '').replace(')', '').split(',')[0]}/{theme['primary'].lstrip('#')}?text=Content+is+King&font=rajdhani" style="border-radius: 5px; margin-bottom: 20px; max-width: 100%;" />
+            <img src="https://images.unsplash.com/photo-1574267432644-f65b5fe8fb11?w=600&h=100&fit=crop" style="border-radius: 5px; margin-bottom: 20px; max-width: 100%; opacity: 0.7;" />
 
             <p style='font-size: 1.1rem; color: {theme["secondary"]}; font-family: Orbitron; margin: 0;'>
                 ⚡ Powered by Advanced Analytics Engine | Real-time Strategic Intelligence ⚡
@@ -1408,13 +1258,12 @@ def render_dashboard_page(theme, selected_theme_name):
 # --- MAIN DASHBOARD FUNCTION ---
 def main_dashboard():
     
-    # Theme selector in sidebar at the top
     with st.sidebar:
         st.markdown("# 🎨 THEME SELECTOR")
         selected_theme_name = st.selectbox(
             "Choose Your Visual Theme",
             options=list(COLOR_THEMES.keys()),
-            index=0, # Default to the first theme (Mint Dream Light)
+            index=0,
             help="Select a color palette for the entire dashboard",
             key="global_theme_selector"
         )
@@ -1423,7 +1272,6 @@ def main_dashboard():
         
         st.markdown("---")
         
-        # --- NAVIGATION BUTTONS ---
         st.markdown("### 🧭 NAVIGATION")
         
         if st.button("🏠 Home", use_container_width=True):
@@ -1436,8 +1284,6 @@ def main_dashboard():
         
         st.markdown("---")
         
-        # --- DYNAMIC SIDEBAR IMAGE ---
-        # Rotates brand logo based on theme selection
         theme_index = list(COLOR_THEMES.keys()).index(selected_theme_name)
         platform_name = list(PLATFORM_LOGOS.keys())[theme_index % len(PLATFORM_LOGOS)]
         logo_colors = PLATFORM_LOGOS[platform_name]
@@ -1449,10 +1295,8 @@ def main_dashboard():
         )
 
     
-    # Apply the selected theme CSS
     st.markdown(generate_theme_css(theme), unsafe_allow_html=True)
     
-    # --- PAGE ROUTING ---
     if st.session_state.page == 'home':
         render_homepage(theme)
     else:
@@ -1462,4 +1306,3 @@ def main_dashboard():
 # --- EXECUTE ---
 if __name__ == "__main__":
     main_dashboard()
-
